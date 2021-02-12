@@ -1,5 +1,4 @@
-Development Environment for ICM 7.10 and older
-==============================================
+# Development Environment for ICM 7.10 and older
 
 This project provides some compose files to run some necessary development resources on a local machine.
 
@@ -8,6 +7,8 @@ This project provides some compose files to run some necessary development resou
 - Database - an Oracle XE server or an MSSQL Server instance
 
 This running instances does not make use of persistent storage, data are stored in the docker images. It is possible to adapt the hostname for the Solr server. If necessary you can change the environment variable `SOLR_HOST`in the compose files. 
+
+## Commands
 
 **Start environment**
 ```
@@ -24,8 +25,10 @@ docker-compose -f docker-compose-<databasetype>.yml stop
 docker-compose -f docker-compose-<databasetype>.yml down
 ```
 
-Oracle
-------
+## Development Environment Configuration
+
+### Oracle
+
 This is the configuration of the environment.properties file:
 ```
 # Database configuration
@@ -42,8 +45,8 @@ solrZooKeeperHostList = localhost:2181/solr8
 solrClusterIndexPrefix = localicm
 ```
 
-MSSQL Server
-------
+### MSSQL Server
+
 This is the configuration of the environment.properties file:
 ```
 # Database configuration
@@ -62,8 +65,8 @@ solrZooKeeperHostList = localhost:2181/solr8
 solrClusterIndexPrefix = localicm
 ```
 
-Test Mail Server Configuration
-------
+### Test Mail Server Configuration
+
 ```
 # test.properties
 mail.smtp.host=localhost
@@ -73,8 +76,7 @@ intershop.SMTPServer=localhost
 intershop.mail.messageID.domain=localicm
 ```
 
-Environment Settings
-------
+### Environment Settings
 
 **Linux / Mac**
 ```
