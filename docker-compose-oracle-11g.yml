@@ -1,0 +1,60 @@
+# a docker-compose.yml to start a simple development solr cloud 
+# cluster with one ZooKeeper node and one Solr node.
+#
+# Configuration of MailHog
+# https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
+#
+# The database must be created on your onwn.
+# See https://github.com/IntershopCommunicationsAG/oracle-intershop-docker
+# 
+# run "docker-compose -f docker-compose-mssql.yml up"
+# This is tested on Docker Desktop (win/mac)!
+
+version: '3.7'
+services:
+  solr:
+    image: solr:8.7.0
+    # image: solr:6.6.6
+    container_name: solr
+    ports:
+     - "8983:8983"
+    environment:
+      - ZK_HOST=host.docker.internal:2181
+      # it is possible to change the hostname to a 
+      # resovable machine name or IP in your network
+      - SOLR_HOST=localhost
+    depends_on:
+      - zoo
+
+  zoo:
+    image: zookeeper:3.6.2
+    container_name: zoo
+    restart: always
+    hostname: host.docker.internal
+    ports:
+      - 2181:2181
+      - 7000:7000
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=host.docker.internal:2888:3888;2181
+      ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
+
+  mail:
+    image: mailhog/mailhog:latest
+    container_name: mail
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
+    environment:
+      MH_UI_BIND_ADDR: 0.0.0.0:8025
+      MH_SMTP_BIND_ADDR: 0.0.0.0:1025
+      MH_STORAGE: memory
+
+  # oracle database
+  database:
+    image: intershophub/oracle-11g-intershop:latest
+    container_name: oracle-intershop
+    ports:
+      - "1521:1521"
+      - "5500:5500"
